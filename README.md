@@ -1,42 +1,36 @@
-# Scoop Bucket Template
+# kidchenko/scoop-bucket
 
-<!-- Uncomment the following line after replacing placeholders -->
-<!-- [![Tests](https://github.com/<username>/<bucketname>/actions/workflows/ci.yml/badge.svg)](https://github.com/<username>/<bucketname>/actions/workflows/ci.yml) [![Excavator](https://github.com/<username>/<bucketname>/actions/workflows/excavator.yml/badge.svg)](https://github.com/<username>/<bucketname>/actions/workflows/excavator.yml) -->
+[![Tests](https://github.com/kidchenko/scoop-bucket/actions/workflows/ci.yml/badge.svg)](https://github.com/kidchenko/scoop-bucket/actions/workflows/ci.yml) [![Excavator](https://github.com/kidchenko/scoop-bucket/actions/workflows/excavator.yml/badge.svg)](https://github.com/kidchenko/scoop-bucket/actions/workflows/excavator.yml)
 
-Template bucket for [Scoop](https://scoop.sh), the Windows command-line installer.
-
-## How do I use this template?
-
-1. Generate your own copy of this repository with the "Use this template"
-   button.
-2. Allow all GitHub Actions:
-   - Navigate to `Settings` - `Actions` - `General` - `Actions permissions`.
-   - Select `Allow all actions and reusable workflows`.
-   - Then `Save`.
-3. Workflow permissions:
-   - Navigate to `Settings` - `Actions` - `General` - `Workflow permissions`.
-   - Ensure `Read repository contents and packages permissions` is selected.
-   - Then `Save`.
-4. Document the bucket in `README.md`.
-5. Replace the placeholder repository string in `bin/auto-pr.ps1`.
-6. Create new manifests by copying `bucket/app-name.json.template` to
-   `bucket/<app-name>.json`.
-7. Commit and push changes.
-8. If you'd like your bucket to be indexed on `https://scoop.sh`, add the
-   topic `scoop-bucket` to your repository.
-
-## How do I install these manifests?
-
-After manifests have been committed and pushed, run the following:
+[Scoop](https://scoop.sh) manifests for [kidchenko](https://github.com/kidchenko)'s tray apps.
+The macOS counterpart is [kidchenko/homebrew-tap](https://github.com/kidchenko/homebrew-tap).
 
 ```pwsh
-scoop bucket add <bucketname> https://github.com/<username>/<bucketname>
-scoop install <bucketname>/<manifestname>
+scoop bucket add kidchenko https://github.com/kidchenko/scoop-bucket
+scoop install kidchenko/cota
 ```
 
-## How do I contribute new manifests?
+| App | |
+|---|---|
+| [`cafe`](bucket/cafe.json) | [Cafe](https://github.com/kidchenko/cafe) keeps your PC awake from the tray. |
+| [`cota`](bucket/cota.json) | [Cota](https://github.com/kidchenko/cota) shows your Claude usage limits in the tray. |
+| [`porta`](bucket/porta.json) | [Porta](https://github.com/kidchenko/porta) lists what's listening on your ports in the tray, and stops it. |
+| [`suavez`](bucket/suavez.json) | [Sua Vez](https://github.com/kidchenko/suavez) lights up the tray when your coding agent finishes or needs you. |
 
-To make a new manifest contribution, please read the [Contributing
-Guide](https://github.com/ScoopInstaller/.github/blob/main/.github/CONTRIBUTING.md)
-and [App Manifests](https://github.com/ScoopInstaller/Scoop/wiki/App-Manifests)
-wiki page.
+Each app installs the release's portable exe with a Start menu shortcut. They
+live in the tray, so quit them from their menu before `scoop update` or
+`scoop uninstall`. Uninstalling also turns off Run at login; settings in
+`%APPDATA%` are kept.
+
+## Updates
+
+[`excavator`](.github/workflows/excavator.yml) runs every four hours and moves
+each manifest to its app's latest GitHub release, taking the hash from the
+release's `SHA256SUMS.txt`. To run it now:
+
+```bash
+gh workflow run excavator.yml --repo kidchenko/scoop-bucket
+```
+
+[`ci`](.github/workflows/ci.yml) validates the manifests and installs and
+uninstalls every app on each push and pull request.

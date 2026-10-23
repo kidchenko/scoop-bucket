@@ -42,3 +42,34 @@ jobs:
         run: |
           $env:SCOOP_HOME="$(Convert-Path '.\scoop_core')"
           .\my_bucket\bin\test.ps1
+
+  # Proves each manifest's url, hash, shortcut and uninstaller line up, the
+  # way the Homebrew tap's CI installs and uninstalls every cask.
+  install:
+    name: Install and uninstall
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Checkout Bucket
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Install Scoop
+        # Runners are elevated; Scoop refuses that without -RunAsAdmin.
+        run: |
+          iex "& {$(irm get.scoop.sh)} -RunAsAdmin"
+          Join-Path (Resolve-Path ~).Path 'scoop\shims' >> $env:GITHUB_PATH
+      - name: Install and uninstall every manifest
+        run: |
+          $menu = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Scoop Apps"
+          foreach ($m in Get-ChildItem bucket\*.json) {
+            $app = $m.BaseName
+            $name = (Get-Content $m -Raw | ConvertFrom-Json).shortcuts[0][1]
+            scoop install $m.FullName
+            if ($LASTEXITCODE) { throw "$app did not install" }
+            if (-not (Test-Path "~\scoop\apps\$app\current\$app.exe")) { throw "$app.exe missing" }
+            if (-not (Test-Path "$menu\$name.lnk")) { throw "$app shortcut missing" }
+            scoop uninstall $app
+            if ($LASTEXITCODE) { throw "$app did not uninstall" }
+            if (Test-Path "~\scoop\apps\$app") { throw "$app left files behind" }
+          }
