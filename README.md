@@ -15,7 +15,9 @@ scoop install kidchenko/cota
 | [`cafe`](bucket/cafe.json) | [Cafe](https://github.com/kidchenko/cafe) keeps your PC awake from the tray. |
 | [`cantos`](bucket/cantos.json) | [Cantos](https://github.com/kidchenko/cantos) gives your screen corners actions, from the tray. |
 | [`cota`](bucket/cota.json) | [Cota](https://github.com/kidchenko/cota) shows your Claude usage limits in the tray. |
+| [`luz`](bucket/luz.json) | [Luz](https://github.com/kidchenko/luz) warms your screen at night, like f.lux, from the tray. |
 | [`porta`](bucket/porta.json) | [Porta](https://github.com/kidchenko/porta) lists what's listening on your ports in the tray, and stops it. |
+| [`sonus`](bucket/sonus.json) | [Sonus](https://github.com/kidchenko/sonus) gives every app its own volume slider, from the tray. |
 | [`suavez`](bucket/suavez.json) | [Sua Vez](https://github.com/kidchenko/suavez) lights up the tray when your coding agent finishes or needs you. |
 
 Each app installs the release's portable exe with a Start menu shortcut. They
