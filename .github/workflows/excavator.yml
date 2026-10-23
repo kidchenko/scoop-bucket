@@ -1,5 +1,8 @@
 name: Excavator
 
+# Moves each manifest to its app's latest release. To run it now:
+#   gh workflow run excavator.yml --repo kidchenko/scoop-bucket
+
 on:
   workflow_dispatch:
   schedule:
